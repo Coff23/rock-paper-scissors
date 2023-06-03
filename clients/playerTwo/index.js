@@ -14,12 +14,13 @@ socket.on('message', (message) => {
 
 socket.on('result', (result) => {
   console.log(result);
+  rl.question();
 });
 
 // Make a move
-function makeMove(move) {
-  socket.emit('move', move);
-}
+// function makeMove(move) {
+//   socket.emit('move', move);
+// }
 
 const rl = readline.createInterface({
   input: process.stdin,

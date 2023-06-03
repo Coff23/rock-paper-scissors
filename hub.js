@@ -44,11 +44,14 @@ io.on('connection', (socket) => {
 
     if (player1Move && player2Move) {
       const result = determineWinner(player1Move, player2Move);
-      player1.emit('result', result);
-      player2.emit('result', result);
+      if (player1) player1.emit('message', result);
+      if (player2) player2.emit('message', result);
 
       // Reset the game
-      resetGame();
+      setTimeout(() => {
+        resetGame();
+        startGame();
+      });
     }
   });
 
@@ -57,9 +60,21 @@ io.on('connection', (socket) => {
     // Reset the game if a player disconnects
     if (socket === player1 || socket === player2) {
       resetGame();
+      startGame();
     }
   });
 });
+
+if (player1) {
+  player1.on('message', (message) => {
+    console.log(message);
+  });
+}
+if (player2) {
+  player2.on('message', (message) => {
+    console.log(message);
+  });
+}
 
 // Start the server
 const PORT = process.env.PORT || 3002;
@@ -69,8 +84,14 @@ server.listen(PORT, () => {
 
 // Game logic
 function startGame() {
-  player1.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
-  player2.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
+  if (player1)
+    setTimeout(() => {
+      player1.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
+    }, 1000);
+  if (player2)
+    setTimeout(() => {
+      player2.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
+    }, 1000);
 }
 
 function determineWinner(move1, move2) {
@@ -92,8 +113,8 @@ function determineWinner(move1, move2) {
 }
 
 function resetGame() {
-  player1Move = null;
-  player2Move = null;
+  // player1Move = null;
+  // player2Move = null;
   player1 = null;
   player2 = null;
 }
