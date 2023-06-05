@@ -19,10 +19,6 @@ let player2Move = null;
 let player1Score = 0;
 let player2Score = 0;
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/client.html');
-});
-
 // Handle incoming socket connections
 io.on('connection', (socket) => {
   // Assign players when two clients are connected
