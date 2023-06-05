@@ -14,21 +14,23 @@ socket.on('message', (message) => {
 
 socket.on('result', (result) => {
   console.log(result);
-  rl.question();
+  promptForMove();
 });
-
-// // Make a move
-// function makeMove(move) {
-//   socket.emit('move', move);
-// }
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-// Make a move
-rl.question('Enter your move (rock, paper, or scissors): ', (move) => {
-  socket.emit('move', move);
-  rl.close();
-});
+function promptForMove() {
+  rl.question('Enter your move (rock, paper, or scissors), or enter "exit" to quit: ', (move) => {
+    if (move.toLowerCase() === 'exit') {
+      console.log('Goodbye!');
+      rl.close();
+    } else {
+      socket.emit('move', move);
+    }
+  });
+}
+
+promptForMove();

@@ -44,14 +44,15 @@ io.on('connection', (socket) => {
 
     if (player1Move && player2Move) {
       const result = determineWinner(player1Move, player2Move);
-      if (player1) player1.emit('message', result);
-      if (player2) player2.emit('message', result);
+      if (player1) player1.emit('result', result);
+      if (player2) player2.emit('result', result);
 
       // Reset the game
       setTimeout(() => {
-        resetGame();
+        player1Move = null;
+        player2Move = null;
         startGame();
-      });
+      }, 2000);
     }
   });
 
@@ -84,14 +85,10 @@ server.listen(PORT, () => {
 
 // Game logic
 function startGame() {
-  if (player1)
-    setTimeout(() => {
-      player1.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
-    }, 1000);
-  if (player2)
-    setTimeout(() => {
-      player2.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
-    }, 1000);
+  if (player1 && player2) {
+    player1.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
+    player2.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
+  }
 }
 
 function determineWinner(move1, move2) {
@@ -113,8 +110,6 @@ function determineWinner(move1, move2) {
 }
 
 function resetGame() {
-  // player1Move = null;
-  // player2Move = null;
-  player1 = null;
-  player2 = null;
+  player1Move = null;
+  player2Move = null;
 }
