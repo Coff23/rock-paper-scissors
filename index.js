@@ -1,9 +1,11 @@
 'use strict';
 
+const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 
 // Create an HTTP server
+const app = express();
 const server = http.createServer();
 const io = socketIO(server);
 
@@ -16,6 +18,10 @@ let player1Move = null;
 let player2Move = null;
 let player1Score = 0;
 let player2Score = 0;
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/client.html');
+});
 
 // Handle incoming socket connections
 io.on('connection', (socket) => {

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors</title>
+</head>
+<body>
+  <h1>Rock Paper Scissors</h1>
+  <div id="messages"></div>
+  <div id="scores"></div>
+  <form id="moveForm">
+    <input type="text" id="moveInput" placeholder="Enter your move (rock, paper, or scissors)">
+    <button type="submit">Submit</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const messagesElement = document.getElementById('messages');
+    const scoresElement = document.getElementById('scores');
+    const moveForm = document.getElementById('moveForm');
+    const moveInput = document.getElementById('moveInput');
+
+    moveForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const move = moveInput.value.trim();
+      if (move) {
+        socket.emit('move', move);
+        moveInput.value = '';
+        moveInput.focus();
+      }
+    });
+
+    socket.on('message', (message) => {
+      const messageElement = document.createElement('p');
+      messageElement.textContent = message;
+      messagesElement.appendChild(messageElement);
+    });
+
+    socket.on('result', (result) => {
+      const resultElement = document.createElement('p');
+      resultElement.textContent = result;
+      messagesElement.appendChild(resultElement);
+    });
+
+    socket.on('score', (scoreData) => {
+      const { player1Score, player2Score } = scoreData;
+      scoresElement.textContent = `Score: You = ${player1Score} Opponent = ${player2Score}`;
+    });
+
+    socket.on('connect', () => {
+      messagesElement.innerHTML = '<p>Connected to the game server</p>';
+    });
+
+    socket.on('disconnect', () => {
+      messagesElement.innerHTML = '<p>Disconnected from the game server</p>';
+    });
+  </script>
+</body>
+</html>
