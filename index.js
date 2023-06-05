@@ -14,6 +14,8 @@ let player2 = null;
 // Game variables
 let player1Move = null;
 let player2Move = null;
+let player1Score = 0;
+let player2Score = 0;
 
 // Handle incoming socket connections
 io.on('connection', (socket) => {
@@ -46,6 +48,13 @@ io.on('connection', (socket) => {
       const result = determineWinner(player1Move, player2Move);
       if (player1) player1.emit('result', result);
       if (player2) player2.emit('result', result);
+
+      // Score based on results
+      if(result === 'Player 1 wins!') {
+        player1Score++;
+      } else if(result === 'Player 2 wins!') {
+        player2Score++;
+      }
 
       // Reset the game
       setTimeout(() => {
@@ -86,8 +95,8 @@ server.listen(PORT, () => {
 // Game logic
 function startGame() {
   if (player1 && player2) {
-    player1.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
-    player2.emit('message', 'Game starts! Make your move (rock, paper, or scissors)');
+    player1.emit('message', `Game starts! Make your move (rock, paper, or scissors) Score: You = ${player1Score} Opponent = ${player2Score} `);
+    player2.emit('message', `Game starts! Make your move (rock, paper, or scissors) Score: You = ${player2Score} Opponent = ${player1Score} `);
   }
 }
 
