@@ -22,7 +22,6 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-
 function promptForMove() {
   rl.question('Enter your move (rock, paper, or scissors), or enter "exit" to quit: ', (move) => {
     if (move.toLowerCase() === 'exit') {
