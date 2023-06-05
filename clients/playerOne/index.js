@@ -1,7 +1,7 @@
 'use strict';
 
 const io = require('socket.io-client');
-const socket = io('http://localhost:3002');
+const socket = io('https://rock-paper-scissors-df68.onrender.com/');
 const readline = require('readline');
 
 socket.on('connect', () => {
