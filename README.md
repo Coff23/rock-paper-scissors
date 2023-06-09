@@ -24,3 +24,7 @@ Problem Domain
   - HTTP: An HTTP server is created to handle initial client connections and WebSocket upgrades.
 
   - JavaScript: The application logic is implemented using JavaScript, providing a flexible and event-driven programming language.
+
+## UML
+
+![UML](./assets/Screenshot_20230609_051501.png)
